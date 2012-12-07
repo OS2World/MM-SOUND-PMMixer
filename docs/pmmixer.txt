@@ -1,0 +1,184 @@
+PMMIXER V2.0 - a mixer tool for the SoundBlaster Pro under OS/2 2.1 MMPM/2
+==========================================================================
+
+------------------------------------------------------------------------------
+2002/11/13 Update
+
+The Author had released this program as Public Domain and Open Source.
+"You can do with this software whatever you want"
+
+
+Thanks to the Author, Jeroen Hoppenbrouwers (hoppie@home.nl), for making it open source.
+
+Martin Iturbide
+OS2World.com
+
+------------------------------------------------------------------------------
+  --------------------------------------------------------------------------
+
+
+CHANGES FROM PREVIOUS RELEASE
+-----------------------------
+The use of an .INI file to retain all mixer settings between sessions has
+been extended and the mixer now correctly picks up current SoundBlaster
+settings when re-activated during a session. The "-" command line parameter
+to force PMMIXER to start minimized has been removed in anticipation to the
+next revision. No other externally visible modifications have taken place.
+
+
+SHORT FUTURE
+------------
+Next phase will be addition of command line parameters to set up the
+mixer by hand. Handy for "standard" settings. As soon as somebody provides
+me with a SoundBlaster 16ASP, I will gladly rewrite this program to control
+the 16ASP (hint hint). A bit further away, I might try to use as much of
+MMPM/2 as practical and do the rest in hardware. If only I could get API
+support...
+
+
+What is PMMIXER?
+----------------
+PMMIXER is a PM program to access the internal mixer on the SoundBlaster Pro.
+It displays the look-alike of a normal mixing console, with sliders and
+pushbuttons to control the SoundBlaster Pro's mixer manually.
+
+
+Why do I need PMMIXER?
+----------------------
+Because your precious SoundBlaster Pro has many controls that you cannot
+possibly use with the sparse OS/2 MMPM/2 drivers. Especially people
+who have attached a CD-ROM player to the CD-Input connector of the
+SoundBlaster *need* this mixer program to be able to hear anything.
+
+
+What do I need to run PMMIXER?
+------------------------------
+Naturally, you need a SoundBlaster Pro sound card. Again, be warned
+that OS/2 does not like this card to work on IRQ channel 7, because this IRQ
+is reserved for the LPT1 device. Put the SoundBlaster Pro on IRQ 5 or so.
+Since this is a beta version, there's no provision for SoundBlasters on
+other addresses than 0x220. Normally, there's no reason to set the card
+to another address, so it will probably work right away. If someone needs
+other IO adresses, please ask me for it. IRQ and DMA is not used at all.
+
+
+How do I run PMMIXER?
+---------------------
+To run PMMIXER just type 'START PMMIXER' at an OS/2 prompt, or double click
+on the file object for PMMIXER.EXE. You can also shadow the PMMIXER file
+object into a folder of your choice, to easily get to it, or create a real
+Program Object.
+
+Be careful to start PMMIXER in the directory where you want the PMMIXER.INI
+file to be created (or to be found). You can include the default directory
+in the appropriate field of the Program Object.
+
+
+How do I work with PMMIXER?
+---------------------------
+The program is pretty much self explanatory. The sliders control the volume
+levels for the various inputs and outputs of the SB Pro. The push buttons
+control the recording source and whether or not certain filters are
+enabled. Play around while producing some music (e.g. by running TRACKER)
+and you'll figure out how it all works.
+
+In the System Menu of the mixer (the little black-and-white mixer icon in the
+top-left corner of the window) I've added an About box choice that displays
+some information about version number and such (and wastes a few CPU cycles
+on you) plus a small Help choice that currently gives some beta information.
+
+PMMIXER should not interfere with other programs that use the AMPMIX device or
+access the SoundBlaster directly. It will not, however, update itself as soon
+as the SoundBlaster settings are changed. The update will come as soon as you
+re-activate the mixer, e.g. by clicking on it.
+
+On the other hand, if you switch to Agressive mode, PMMIXER *will*
+bluntly reset SB levels to what you told them to be every 1/10th of a
+second. This is to overrule %$#@@%$ MMPM/2 that thinks it knows better
+what you want than you do yourself (hey, it still is IBM, isn't it?).
+
+
+What are the known bugs?
+------------------------
+The only "bug" that remains (or so I think) is not something I can do much
+about. The program works by putting bytes directly into the Sound Blaster
+hardware. The design of this card causes such input to interfere with
+a simultaneous stereo sample playback: you have a 50% chance that the
+left and right channels suddenly swap place! This will not happen while
+manipulating slider controls, only with push buttons.
+In Agressive mode, the program inputs hardware mixer control bytes into
+the Sound Blaster every 1/10th of a second. This leads to random panning of
+any stereo sound that gets played.
+
+I could do two things about this:
+
+A) Replace Agressive mode by a less agressive one that only re-sets sliders,
+B) Use an API instead of hardware access. Creative Labs, pleaaase?!
+
+If people would be happy with the less agressive slider-only mode, please
+tell me. I suspect many people to do little or nothing with the push buttons
+and therefore it won't matter much to keep them out of Agressive mode.
+
+I did my best to code the PMMIXER display-independently. On my 1024*768*256
+screen it looks pretty neat. It might be that on other lower or higher 
+resolution screens some graphics are screwed up. If so, please notify me,
+so that I can change the program appropriately.
+
+Some folks complained about the lousy look of the small mixer icon. In
+my opinion I lack space to create something like the big mixer in the
+About box. But if someone really cares, just mail me your new icon.
+
+
+Who else gets credit?
+---------------------
+First, David Nichols (davidn@cs.tamu.edu) who wrote what is now version 1.0
+of PMMIXER. Since this was my first encounter with OS/2 PM programming,
+many thanks to David for implicitly teaching me how to do things.
+
+Second, Michael Fulbright (msf@as.arizona.edu) for providing us OS/2 fanatics
+with a good SoundBlaster driver and some useful documentation on it. 
+Unfortunately for his ego, IBM decided not to buy his drivers.
+
+Third, some people at IBM for giving birth to OS/2 2.x which is by far the
+nicest operating system for Intel-based computers that I've encountered
+so far.
+
+
+Are the sources available?
+--------------------------
+Of course they are. Just mail me (hoppie@kub.nl) and you'll get them.
+Since this is a beta release, code still is under development.
+
+
+What about MMPM/2?
+------------------
+I would *love* to re-write this program to correctly control the Sound
+Blaster Pro through MMPM/2. However, Creative Labs decided to screw us
+and did a bad job on writing drivers. No mixer support at all.
+Hopefully they will learn quickly after having a good look at the
+Pro Audio Spectrum (PAS-16) drivers.
+
+
+What about other sound cards?
+-----------------------------
+For this one, I would prefer a *generic* API to program to, but this
+will probably not be for the forseeable future. As a temporary solution,
+send me your favorite sound card and I'll see what I can do  :-)
+
+
+DISCLAIMER
+----------
+I (and probably David and Michael as well) take no responsibility whatsoever
+about the correct functioning of this program. It is provided for free
+to everyone who happens to like it and will cost $100 for others.
+
+Having said this, I might try to adjust the program if someone kindly points
+me to a flaw or an improvement.
+
+
+
+
+January 30, 1994
+Jeroen Hoppenbrouwers (hoppie@kub.nl)
+Infolab, Tilburg University, The Netherlands
+
